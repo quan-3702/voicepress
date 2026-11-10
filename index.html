@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VoicePress - Audiobook Maker &amp; Text to Speech</title>
+  <meta name="description" content="Turn Word, PDF, EPUB and text files into MP3 audiobooks with natural AI voices that run on your own PC. 30+ languages, works offline, no account, no subscription.">
+  <meta name="theme-color" content="#b45309">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img src="icon-192.png" alt="" width="30" height="30"><span>VoicePress</span></div>
+    <span class="spacer"></span>
+    <div class="top-btns">
+      <button id="openBtn" class="primary">📂 Open a book</button>
+      <button id="pasteBtn" class="tb">📋 Paste text</button>
+      <button id="moreBtn" class="tb">☰ More</button>
+      <button id="proBtn" class="pro-btn">★ Get Pro</button>
+    </div>
+    <div id="menu" class="menu" hidden>
+      <button id="sampleBtn">📖 Add a short sample story</button>
+      <button id="dictBtn">🗣 Fix how words are said… <span class="pro-tag">PRO</span></button>
+      <button id="storageBtn">💽 Storage used on this PC</button>
+      <hr>
+      <a href="help.html" target="_blank" rel="noopener">❓ How to use VoicePress</a>
+      <a href="mailto:thequan03072002@gmail.com?subject=VoicePress%20feedback">✉ Feedback &amp; support</a>
+      <a href="https://apps.microsoft.com/detail/9PDJ7G2HRVTG" target="_blank" rel="noopener">More apps: ScreenPress – screen recorder</a>
+      <a href="https://apps.microsoft.com/search?query=CaptionPress" target="_blank" rel="noopener">More apps: CaptionPress – subtitles</a>
+    </div>
+    <input id="fileIn" type="file" accept=".txt,.text,.md,.docx,.pdf,.epub,.htm,.html,.rtf,text/plain,application/pdf,application/epub+zip,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+  </header>
+
+  <main class="layout">
+    <aside class="left">
+      <section class="tool">
+        <div class="row"><h2>📚 My books</h2><span id="bookCount" class="muted"></span></div>
+        <div id="bookList" class="books"></div>
+      </section>
+      <section class="tool" id="voiceTool">
+        <h2>🎙 Voice</h2>
+        <label class="field">Language<select id="lang"></select></label>
+        <label class="field">Voice<select id="voice"></select></label>
+        <label class="field">Speed <span id="speedV" class="muted"></span><input id="speed" type="range" min="0.7" max="1.6" step="0.05"></label>
+        <label class="field">Pause between sentences<select id="pause"><option value="0.6">Short</option><option value="1">Normal</option><option value="1.6">Long</option></select></label>
+        <div class="row-btns tight"><button id="tryBtn" class="ghost">▶ Try this voice</button></div>
+        <p id="voiceNote" class="hint"></p>
+      </section>
+      <section class="tool" id="quota"></section>
+      <p class="promise">🔒 Your books never leave this PC – the AI voice runs right here, offline after the first download.<br>💳 Pay once for Pro – no subscription.</p>
+      <p class="fb-note">💬 Something not working the way you want? Tell me – <a href="mailto:thequan03072002@gmail.com?subject=VoicePress%20feedback">thequan03072002@gmail.com</a>. I read every message and improve the app.</p>
+    </aside>
+
+    <section class="stage" id="stage">
+      <div id="empty" class="empty">
+        <div class="drop" id="drop">
+          <div class="big">🎧</div>
+          <h1>Turn any book into an audiobook</h1>
+          <p>Open a <strong>Word, PDF, EPUB or text</strong> file – or drop it here. VoicePress reads it aloud with a natural AI voice and saves MP3 files you can play on your phone, in the car or on any speaker.</p>
+          <div class="row-btns center"><button id="openBtn2" class="primary big-btn">📂 Open a book</button><button id="pasteBtn2" class="ghost big-btn">📋 Paste text</button><button id="sampleBtn2" class="ghost big-btn">📖 Try a sample</button></div>
+          <p class="muted">Vietnamese, English, Spanish, French, German, Chinese, Russian and 25+ more languages.</p>
+        </div>
+      </div>
+      <div id="bookView" hidden>
+        <div class="bookhead">
+          <input id="bookTitle" class="title-in" type="text" maxlength="120" aria-label="Book title">
+          <p id="bookInfo" class="muted"></p>
+        </div>
+        <div class="bar">
+          <button id="makeBtn" class="primary">🎧 Make the audiobook</button>
+          <button id="stopBtn" class="ghost" hidden>⏹ Stop</button>
+          <span class="spacer"></span>
+          <button id="saveOne" class="ghost">⬇ Save as one MP3</button>
+          <button id="saveZip" class="ghost">⬇ Save chapters (ZIP)</button>
+          <button id="delBook" class="ghost danger">🗑</button>
+        </div>
+        <div id="progress" class="progress" hidden><div class="pbar"><i id="pfill"></i></div><span id="ptext" class="muted"></span></div>
+        <div class="split">
+          <div id="chapters" class="chapters"></div>
+          <div class="reader">
+            <div class="player">
+              <button id="playBtn" class="primary round" title="Play / pause">▶</button>
+              <div class="ptime"><input id="seek" type="range" min="0" max="1" step="0.1" value="0"><span id="time" class="muted">0:00 / 0:00</span></div>
+              <select id="rate" class="tb" title="Playback speed"><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="0.85">0.85×</option></select>
+              <button id="saveCh" class="ghost small">⬇ MP3</button>
+              <button id="editCh" class="ghost small">✏️ Edit text</button>
+            </div>
+            <div id="text" class="text" tabindex="0"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="pasteDialog" class="dlg wide">
+    <h2>Paste text</h2>
+    <label class="field">Title<input id="pasteTitle" type="text" maxlength="120" placeholder="My book"></label>
+    <textarea id="pasteText" rows="14" spellcheck="false" placeholder="Paste or type your text here. Lines like “Chapter 1” start a new chapter."></textarea>
+    <div class="row-btns"><button id="pasteOk" class="primary">✓ Add book</button><button id="pasteCancel" class="ghost">Cancel</button></div>
+  </dialog>
+
+  <dialog id="editDialog" class="dlg wide">
+    <h2>Edit chapter</h2>
+    <label class="field">Chapter title<input id="editTitle" type="text" maxlength="120"></label>
+    <textarea id="editText" rows="16" spellcheck="true"></textarea>
+    <p class="hint">Leave an empty line between paragraphs. Only the sentences you change are made again.</p>
+    <div class="row-btns"><button id="editOk" class="primary">✓ Save</button><button id="editSplit" class="ghost">✂ Split into a new chapter at the cursor</button><button id="editCancel" class="ghost">Cancel</button></div>
+  </dialog>
+
+  <dialog id="dictDialog" class="dlg wide">
+    <h2>Fix how words are said</h2>
+    <p class="muted">One per line: <code>word = how to say it</code>. Used for every book. Example: <code>Dr. = Doctor</code>, <code>VoicePress = Voice Press</code>, <code>TP.HCM = thành phố Hồ Chí Minh</code>.</p>
+    <textarea id="dictText" rows="12" spellcheck="false"></textarea>
+    <div class="row-btns"><button id="dictOk" class="primary">✓ Save</button><button id="dictCancel" class="ghost">Cancel</button></div>
+  </dialog>
+
+  <dialog id="proDialog" class="dlg">
+    <h2>VoicePress Pro</h2>
+    <p class="muted">One-time purchase. Yours forever on this Microsoft account. No subscription, ever.</p>
+    <ul class="pro-list">
+      <li><strong>Whole books, no daily limit</strong> – the free version makes 3,000 words a day (about 20 minutes of audio)</li>
+      <li><strong>Up to 4× faster</strong> – uses more of your PC’s processor cores at once</li>
+      <li><strong>Unlimited books</strong> in your library (free: 2)</li>
+      <li><strong>Fix how words are said</strong> – names, short forms, foreign words</li>
+    </ul>
+    <p class="fb-note">💬 Something not working the way you want? Tell me – <a href="mailto:thequan03072002@gmail.com?subject=VoicePress%20feedback">thequan03072002@gmail.com</a>. I read every message and improve the app.</p>
+    <p id="proMsg" class="pro-msg" hidden></p>
+    <div class="row-btns">
+      <button id="buyBtn" class="primary" autofocus>Unlock Pro</button>
+      <button id="restoreBtn" class="ghost">Restore purchase</button>
+      <button id="closePro" class="ghost">Not now</button>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" hidden></div>
+  <div id="restartBar" class="restart" hidden>A new version of VoicePress is ready. <button id="restartBtn" class="primary">Restart now</button></div>
+  <audio id="audio" preload="auto"></audio>
+  <script src="app.js"></script>
+</body>
+</html>

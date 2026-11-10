@@ -1,0 +1,17 @@
+{
+  "name": "VoicePress - Audiobook Maker & Text to Speech",
+  "short_name": "VoicePress",
+  "description": "Turn Word, PDF, EPUB and text files into MP3 audiobooks with natural AI voices that run on your own PC. 30+ languages, works offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#b45309",
+  "theme_color": "#b45309",
+  "categories": ["books", "productivity", "education"],
+  "file_handlers": [{ "action": "./", "accept": { "application/pdf": [".pdf"], "application/epub+zip": [".epub"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"], "text/plain": [".txt", ".md"], "application/rtf": [".rtf"] } }],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
