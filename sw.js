@@ -1,4 +1,4 @@
-const CACHE = 'voicepress-v1';
+const CACHE = 'voicepress-v2';
 const LIB = 'voicepress-lib'; // AI voice engine files from the CDN, kept for offline use
 const ASSETS = ['./', 'index.html', 'help.html', 'privacy.html', 'style.css', 'app.js', 'tts-worker.js', 'lame.min.js', 'pdf.min.mjs', 'pdf.worker.min.mjs', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png'];
 self.addEventListener('install', (e) => {
